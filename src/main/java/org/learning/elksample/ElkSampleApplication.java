@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +32,11 @@ public class ElkSampleApplication {
                     String idRequest = UUID.randomUUID().toString();
                     MDC.put("ID_REQUEST", idRequest);
                     MDC.put("USER", users[random.nextInt(users.length)]);
+                    try {
+                        MDC.put("IP_SOURCE", InetAddress.getLocalHost().getHostAddress());
+                    } catch (UnknownHostException ex) {
+                        logger.error("Can't get client IP", ex);
+                    }
 
                     logger.info("Request received ");
 
