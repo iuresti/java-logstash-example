@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <timestamp key="byDay" datePattern="yyyyMMdd'T'HHmmss"/>
+
+    <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5050</destination>
+
+        <!--<encoder class="net.logstash.logback.encoder.LogstashEncoder" />-->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc/>
+                <context/>
+                <version/>
+                <logLevel/>
+                <loggerName/>
+
+                <pattern>
+                    <pattern>
+                        {
+                        "appName": "elk-testdata",
+                        "appVersion": "1.0"
+                        }
+                    </pattern>
+                </pattern>
+
+                <threadName/>
+                <message/>
+
+                <logstashMarkers/>
+                <arguments/>
+
+                <stackTrace/>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>elk-example-${byDay}.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="stash"/>
+        <appender-ref ref="file"/>
+    </root>
+</configuration>
